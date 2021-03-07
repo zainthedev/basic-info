@@ -2,18 +2,43 @@ import http = require('http');
 import fs = require('fs');
 
 http
-	.createServer(function (req, res) {
-		const base = new URL('https://localhost:8080');
-		const myURL = new URL(req.url!, base);
-		const filename = '.' + myURL.pathname + '.html';
-		fs.readFile(filename, function (err, data) {
-			if (err) {
-				res.writeHead(404, { 'Content-Type': 'text/html' });
-				return res.end('404 Not Found');
-			}
-			res.writeHead(200, { 'Content-Type': 'text/html' });
-			res.write(data);
-			return res.end();
-		});
+	.createServer((req, res) => {
+		if (req.url === '/') {
+			fs.readFile('index.html', (err, data) => {
+				if (err) {
+					throw err;
+				}
+				res.writeHead(200, { 'Content-Type': 'text/html' });
+				res.write(data);
+				return res.end();
+			});
+		} else if (req.url === '/about') {
+			fs.readFile('about.html', (err, data) => {
+				if (err) {
+					throw err;
+				}
+				res.writeHead(200, { 'Content-Type': 'text/html' });
+				res.write(data);
+				return res.end();
+			});
+		} else if (req.url === '/contact') {
+			fs.readFile('contact-me.html', (err, data) => {
+				if (err) {
+					throw err;
+				}
+				res.writeHead(200, { 'Content-Type': 'text/html' });
+				res.write(data);
+				return res.end();
+			});
+		} else {
+			fs.readFile('404.html', (err, data) => {
+				if (err) {
+					throw err;
+				}
+				res.writeHead(200, { 'Content-Type': 'text/html' });
+				res.write(data);
+				return res.end();
+			});
+		}
 	})
 	.listen(8080);
